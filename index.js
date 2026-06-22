@@ -21,14 +21,25 @@ app.get("/", async (req, res) => {
 
     const events = [];
 
-    $(".card").each((i, el) => {
-      const title = $(el).find(".card-title").text().trim();
-      const description = $(el).find(".card-text").text().trim();
+    $(".align-items-center.row").each((i, el) => {
+      const title = $(el).find(".card-title a").text().trim();
+      const link = "https://vatita.net" + $(el).find(".card-title a").attr("href");
+
+      // La prima .card-text è la descrizione
+      const description = $(el).find(".card-text").first().text().trim();
+
+      // La seconda .card-text contiene la data
+      const date = $(el).find(".text-muted.card-text small").text().trim();
+
+      const image = $(el).find(".card-img").attr("src");
 
       if (title) {
         events.push({
           title,
-          description
+          link,
+          description,
+          date,
+          image
         });
       }
     });
