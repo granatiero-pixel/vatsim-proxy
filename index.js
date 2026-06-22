@@ -6,7 +6,7 @@ app.get("/", async (req, res) => {
   try {
     console.log("Richiesta ricevuta, contatto VATSIM...");
 
-    const response = await fetch("https://api.vatsim.net/v3/events", {
+    const response = await fetch("https://api.vatsim.net/v3/events/all", {
       headers: { "User-Agent": "RenderProxy/1.0" }
     });
 
