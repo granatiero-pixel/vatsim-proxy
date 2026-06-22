@@ -1,23 +1,36 @@
 import express from "express";
+import fetch from "node-fetch";
+import * as cheerio from "cheerio";
 
 const app = express();
 
 app.get("/", async (req, res) => {
   try {
-    console.log("Richiesta ricevuta, contatto VATSIM...");
+    console.log("Richiesta ricevuta, contatto VATITA...");
 
-    const response = await fetch("https://api.vatsim.net/v3/events/all", {
+    const response = await fetch("https://vatita.net/events", {
       headers: { "User-Agent": "RenderProxy/1.0" }
     });
 
-    console.log("Status VATSIM:", response.status);
+    console.log("Status VATITA:", response.status);
 
-    const data = await response.text();
+    const html = await response.text();
 
-    console.log("Lunghezza risposta:", data.length);
+    console.log("Lunghezza HTML:", html.length);
 
-    res.setHeader("Content-Type", "application/json");
-    res.send(data);
+    const $ = cheerio.load(html);
+
+    const events = [];
+
+    $(".event").each((i, el) => {
+      const name = $(el).find(".event-title").text().trim();
+      const date = $(el).find(".event-date").text().trim();
+      const description = $(el).find(".event-description").text().trim();
+
+      events.push({ name, date, description });
+    });
+
+    res.json({ events });
 
   } catch (err) {
     console.error("Errore nel proxy:", err);
@@ -26,5 +39,5 @@ app.get("/", async (req, res) => {
 });
 
 app.listen(3000, () => {
-  console.log("Proxy VATSIM attivo sulla porta 3000");
+  console.log("Proxy VATITA attivo sulla porta 3000");
 });
