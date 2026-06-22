@@ -15,19 +15,22 @@ app.get("/", async (req, res) => {
     console.log("Status VATITA:", response.status);
 
     const html = await response.text();
-
     console.log("Lunghezza HTML:", html.length);
 
     const $ = cheerio.load(html);
 
     const events = [];
 
-    $(".event").each((i, el) => {
-      const name = $(el).find(".event-title").text().trim();
-      const date = $(el).find(".event-date").text().trim();
-      const description = $(el).find(".event-description").text().trim();
+    $(".card").each((i, el) => {
+      const title = $(el).find(".card-title").text().trim();
+      const description = $(el).find(".card-text").text().trim();
 
-      events.push({ name, date, description });
+      if (title) {
+        events.push({
+          title,
+          description
+        });
+      }
     });
 
     res.json({ events });
