@@ -21,14 +21,12 @@ app.get("/", async (req, res) => {
 
     const events = [];
 
-    $(".card").each((i, el) => {
+    $(".card.mb-3, .card").each((i, el) => {
       const title = $(el).find(".card-title a").text().trim();
       const link = "https://vatita.net" + $(el).find(".card-title a").attr("href");
 
-      // Prima card-text = descrizione
       const description = $(el).find(".card-text").first().text().trim();
 
-      // card-text con text-muted = data
       const date = $(el).find(".text-muted.card-text small").text().trim();
 
       const image = $(el).find(".card-img").attr("src");
